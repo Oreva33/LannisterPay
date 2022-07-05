@@ -30,7 +30,7 @@ const UserData = (req, res) => {
   function SortArray(SplitType) {
     for (const element of SplitInfo) {
       if (element.SplitType === SplitType) {
-        return orderedArray.push(element);
+         orderedArray.push(element);
       }
     }
   }
