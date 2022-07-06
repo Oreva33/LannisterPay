@@ -39,26 +39,39 @@ const UserData = (req, res) => {
   SortArray("PERCENTAGE");
   SortArray("RATIO");
 
-  function ErrorMsg(SplitValue, SplitType) {
-    if (SplitValue > Amount) {
-      return res
-        .status(400)
-        .json(
-          `split Amount value cannot be greater than the transaction Amount(${SplitType})`
-        );
+  function ErrorMsg(SplitValue, Sign,SplitType) {
+    if(Sign === ">"){
+      if (SplitValue > Amount) {
+        return res
+          .status(400)
+          .json(
+            `split Amount value cannot be greater than the transaction Amount(${SplitType})`
+          );
+      }
+    }else if(Sign === "<"){
+      if (SplitValue < 0) {
+        return res
+          .status(400)
+          .json(
+            `split Amount value cannot be less than 0(${SplitType})`
+          );
+      }
     }
+   
   }
 
   for (const element of orderedArray) {
     if (element.SplitType === "FLAT") {
-      ErrorMsg(element.SplitValue, "FLAT");
+      ErrorMsg(element.SplitValue,">", "FLAT");
       Balance = Balance - element.SplitValue;
+      ErrorMsg(element.SplitValue,"<", "FLAT");
       element.amount = element.SplitValue;
     }
     if (element.SplitType === "PERCENTAGE") {
       let value = (element.SplitValue / 100) * Balance;
-      ErrorMsg(value, "PERCENTAGE");
+      ErrorMsg(value, ">","PERCENTAGE");
       Balance = Balance - value;
+      ErrorMsg(value, "<","PERCENTAGE");
       element.amount = value;
     }
     if (element.SplitType === "RATIO") {
@@ -71,7 +84,8 @@ const UserData = (req, res) => {
 
       let value = (element.SplitValue / totalRatio) * Balance;
 
-      ErrorMsg(value, "RATIO");
+      ErrorMsg(value, ">","RATIO");
+      ErrorMsg(value, "<","RATIO");
       element.amount = value;
     }
   }
