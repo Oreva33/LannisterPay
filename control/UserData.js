@@ -30,7 +30,7 @@ const UserData = (req, res) => {
   function SortArray(SplitType) {
     for (const element of SplitInfo) {
       if (element.SplitType === SplitType) {
-         orderedArray.push(element);
+        orderedArray.push(element);
       }
     }
   }
@@ -57,7 +57,7 @@ const UserData = (req, res) => {
     }
     if (element.SplitType === "PERCENTAGE") {
       let value = (element.SplitValue / 100) * Balance;
-      ErrorMsg(value,"PERCENTAGE");
+      ErrorMsg(value, "PERCENTAGE");
       Balance = Balance - value;
       element.amount = value;
     }
@@ -70,7 +70,8 @@ const UserData = (req, res) => {
       }, 0);
 
       let value = (element.SplitValue / totalRatio) * Balance;
-      ErrorMsg(value,"RATIO");
+
+      ErrorMsg(value, "RATIO");
       element.amount = value;
     }
   }
@@ -80,7 +81,7 @@ const UserData = (req, res) => {
   });
 
   let finalBal = ratioDataArray.reduce((prevBal, currentAmount) => {
-    return prevBal - currentAmount.amount;
+    return prevBal.toFixed(1) - currentAmount.amount.toFixed(1);
   }, Balance);
 
   if (finalBal < 0) {
@@ -97,4 +98,4 @@ const UserData = (req, res) => {
   return res.status(200).json(resObject);
 };
 
-exports.TPSS = UserData
+exports.TPSS = UserData;
